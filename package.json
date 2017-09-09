@@ -1,0 +1,118 @@
+{
+  "name": "vscode-bump",
+  "displayName": "Bump",
+  "description": "Bump your project's version and update the changelog. Opinionated but configurable.",
+  "icon": "resources/logo-128x128.png",
+  "version": "1.0.0",
+  "license": "MIT",
+  "main": "out/src/extension.js",
+  "publisher": "fabiospampinato",
+  "activationEvents": [
+    "onCommand:bump.bump"
+  ],
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Bump - Configuration",
+      "properties": {
+        "bump.commit.enabled": {
+          "type": "boolean",
+          "description": "Commit the changes automatically",
+          "default": true
+        },
+        "bump.commit.message": {
+          "type": "string",
+          "description": "Commit message",
+          "default": "Bumped version to [version]"
+        },
+        "bump.changelog.enabled": {
+          "type": "boolean",
+          "description": "Enable changelog auto-updates",
+          "default": true
+        },
+        "bump.changelog.create": {
+          "type": "boolean",
+          "description": "Create the changelog file if it doesn't exist",
+          "default": false
+        },
+        "bump.changelog.open": {
+          "type": "boolean",
+          "description": "Open the changelog file after bumping",
+          "default": false
+        },
+        "bump.changelog.file": {
+          "type": "string",
+          "description": "Name of the changelog file",
+          "default": "CHANGELOG.md"
+        },
+        "bump.templates.version": {
+          "type": "string",
+          "description": "Template for the version line",
+          "default": "### Version [version]"
+        },
+        "bump.templates.commit": {
+          "type": "string",
+          "description": "Template for the commit line",
+          "default": "- [message]"
+        },
+        "bump.templates.separator": {
+          "type": "string",
+          "description": "Template for the separator between versions sections",
+          "default": "\n"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "bump.bump",
+        "title": "Bump"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "tsc -p ./",
+    "publish": "vsce publish && npm publish",
+    "compile": "tsc -watch -p ./",
+    "postinstall": "node ./node_modules/vscode/bin/install",
+    "test": "node ./node_modules/vscode/bin/test"
+  },
+  "bugs": {
+    "url": "https://github.com/fabiospampinato/vscode-bump/issues"
+  },
+  "author": {
+    "name": "Fabio Spampinato",
+    "email": "spampinabio@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabiospampinato/vscode-bump.git"
+  },
+  "engines": {
+    "vscode": "^1.15.0"
+  },
+  "keywords": [
+    "vscode",
+    "extension",
+    "changelog",
+    "bump",
+    "version"
+  ],
+  "categories": [
+    "Other"
+  ],
+  "dependencies": {
+    "absolute": "0.0.1",
+    "find-up": "^2.1.0",
+    "lodash": "^4.17.4",
+    "mkdirp": "^0.5.1",
+    "pify": "^3.0.0",
+    "semver": "^5.4.1",
+    "simple-git": "^1.77.0"
+  },
+  "devDependencies": {
+    "@types/node": "^6.0.40",
+    "tslint": "^4.4.2",
+    "typescript": "~2.2.0",
+    "vscode": "^1.1.4"
+  }
+}
