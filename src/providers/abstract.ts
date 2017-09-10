@@ -95,13 +95,14 @@ class Abstract {
   async getCurrentCommits ( git ) {
 
     const {all} = await git.log (),
-          commits = [];
+          allCommits = all.slice ( 0, -1 ), // Ignoring the first commit
+          currentCommits = [];
 
-    if ( all.length > 1 ) {
+    if ( allCommits.length ) {
 
       let nextVersion;
 
-      for ( let commit of all ) {
+      for ( let commit of allCommits ) {
 
         const version = await this.getVersionByCommit ( git, commit );
 
@@ -111,7 +112,7 @@ class Abstract {
 
         if ( isBump ) break;
 
-        commits.push ( commit );
+        currentCommits.push ( commit );
 
         nextVersion = version;
 
@@ -119,7 +120,7 @@ class Abstract {
 
     }
 
-    return commits;
+    return currentCommits;
 
   }
 
