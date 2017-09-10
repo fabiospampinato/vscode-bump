@@ -14,7 +14,7 @@ const Commit = {
     const config = Config.get (),
           message = Changelog.renderLine ( config.commit.message, {version} );
 
-    return Utils.exec ( `git commit -a -m "${message}"`, { cwd: git._baseDir } );
+    return Utils.exec ( `git add . && git commit -a -m "${message}"`, { cwd: git._baseDir } );
 
   }
 
