@@ -89,7 +89,10 @@ const Changelog = {
 
     if ( _.isUndefined ( content ) && !config.changelog.create ) return;
 
-    await Utils.file.make ( changelogPath, section + ( content || '' ) );
+    const changelog = section + ( content || '' ),
+          changelogCleaned = changelog.replace ( /[\r\n]+/g, '\n' ); // Removing multiple new lines
+
+    await Utils.file.make ( changelogPath, changelogCleaned );
 
     if ( config.changelog.open ) return Utils.file.open ( changelogPath );
 
