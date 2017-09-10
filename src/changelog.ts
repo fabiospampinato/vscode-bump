@@ -90,7 +90,7 @@ const Changelog = {
     if ( _.isUndefined ( content ) && !config.changelog.create ) return;
 
     const changelog = section + ( content || '' ),
-          changelogCleaned = changelog.replace ( /[\r\n]+/g, '\n' ); // Removing multiple new lines
+          changelogCleaned = changelog.replace ( /^(\s*\n){2,}/gm, '\n' ); // Removing multiple new lines
 
     await Utils.file.make ( changelogPath, changelogCleaned );
 
