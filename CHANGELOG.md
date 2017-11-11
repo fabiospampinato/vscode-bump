@@ -1,3 +1,6 @@
+### Version 1.0.3
+- Properly getting the path of the currently active document
+
 ### Version 1.0.2
 - Fixed a Windows incompatibility
 
