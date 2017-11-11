@@ -173,7 +173,7 @@ const Utils = {
     async getRepository () {
 
       const {activeTextEditor} = vscode.window,
-            editorPath = activeTextEditor && activeTextEditor.document.fileName,
+            editorPath = activeTextEditor && activeTextEditor.document.uri.fsPath,
             rootPath = Utils.folder.getRootPath ( editorPath );
 
       if ( !rootPath ) return;
