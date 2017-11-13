@@ -19,7 +19,11 @@ async function bump () {
 
   if ( !provider ) return vscode.window.showErrorMessage ( 'This repository is not supported, read Bump\'s readme to learn more about it' );
 
-  const increment = await vscode.window.showQuickPick ( provider.increments );
+  const {increments} = provider;
+
+  if ( !increments.length ) return vscode.window.showErrorMessage ( 'No increments available' );
+
+  const increment = increments.length === 1 ? increments[0] : await vscode.window.showQuickPick ( increments );
 
   if ( !increment ) return;
 
