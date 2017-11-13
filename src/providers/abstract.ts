@@ -6,34 +6,41 @@ import * as path from 'path';
 import * as pify from 'pify';
 import * as semver from 'semver';
 import * as simpleGit from 'simple-git';
+import * as touch from 'touch';
 import * as vscode from 'vscode';
 import Changelog from '../changelog';
 import Commit from '../commit';
-import Config from '../config';
+import Utils from '../utils';
 
 /* ABSTRACT */
 
 class Abstract {
 
-  /* STATIC */
+  config; repo; git;
 
-  static increments = [];
+  constructor ( config, repo ) {
 
-  static async isSupported ( repo ) {
+    this.config = config;
+    this.repo = repo;
+    this.git = pify ( _.bindAll ( simpleGit ( this.repo ), ['log', 'show'] ) );
+
+    this.init ();
+
+  }
+
+  init () {}
+
+  async isSupported () {
 
     return false;
 
   }
 
-  /* API */
-
-  async bump ( repo, increment ) {
+  async bump ( increment, commit = false ) {
 
     /* VARIABLES */
 
-    const config = Config.get (),
-          git = pify ( _.bindAll ( simpleGit ( repo ), ['log', 'show'] ) ),
-          currentCommits = await this.getCurrentCommits ( git );
+    const currentCommits = await this.getCurrentCommits ();
 
     /* CHECKS */
 
@@ -49,7 +56,7 @@ class Abstract {
 
     } else {
 
-      const previousVersion = await this.getPreviousVersion ( git );
+      const previousVersion = await this.getPreviousVersion ();
 
       version = await this.getNextVersion ( previousVersion, increment );
 
@@ -57,45 +64,79 @@ class Abstract {
 
     if ( !version ) return;
 
-    await this.updateVersion ( git, version );
-
-    /* CHANGELOG */
-
-    if ( config.changelog.enabled ) {
-
-      await Changelog.update ( git, version, currentCommits );
-
-    }
+    await this.updateVersion ( version );
 
     /* COMMIT */
 
-    if ( config.commit.enabled ) {
+    if ( commit ) {
 
-      await Commit.do ( git, version );
+      /* CHANGELOG */
+
+      if ( this.config.changelog.enabled ) {
+
+        await Changelog.update ( this.git, version, currentCommits );
+
+      }
+
+      /* COMMIT */
+
+      if ( this.config.commit.enabled ) {
+
+        await Commit.do ( this.git, version );
+
+      }
 
     }
 
   }
 
-  async getDiffByCommit ( git, commit, filepath ) {
+  async getContent ( filePath ) {
 
-    return await git.show ( [commit.hash, filepath] );
+    const repoFilePath = path.join ( this.repo, filePath );
+
+    return await Utils.file.read ( repoFilePath );
 
   }
 
-  async isCommitBump ( git, commit ) {
+  async setContent ( filePath, content ) {
+
+    const repoFilePath = path.join ( this.repo, filePath );
+
+    await Utils.file.write ( repoFilePath, content );
+
+    return touch.sync ( repoFilePath ); // So that they will get automatically refreshed by VSC
+
+  }
+
+  async getContentByCommit ( commit, filePath ) {
+
+    try {
+      return await this.git.show ( `${commit.hash}:${filePath}` );
+    } catch ( e ) {}
+
+  }
+
+  async getDiffByCommit ( commit, filePath ) {
+
+    try {
+      return await this.git.show ( [commit.hash, filePath] );
+    } catch ( e ) {}
+
+  }
+
+  async isCommitBump ( commit ) {
 
     return false;
 
   }
 
-  async getVersionByCommit ( git, commit ) {}
+  async getVersionByCommit ( commit ) {}
 
-  async getPreviousVersion ( git ) {
+  async getPreviousVersion () {
 
-    const {all} = await git.log ();
+    const {all} = await this.git.log ();
 
-    return await this.getVersionByCommit ( git, all[0] );
+    return await this.getVersionByCommit ( all[0] );
 
   }
 
@@ -105,9 +146,9 @@ class Abstract {
 
   }
 
-  async getCurrentCommits ( git ) {
+  async getCurrentCommits () {
 
-    const {all} = await git.log (),
+    const {all} = await this.git.log (),
           allCommits = all.slice ( 0, -1 ), // Ignoring the first commit
           currentCommits = [];
 
@@ -117,11 +158,11 @@ class Abstract {
 
       for ( let commit of allCommits ) {
 
-        const version = await this.getVersionByCommit ( git, commit );
+        const version = await this.getVersionByCommit ( commit );
 
         if ( nextVersion && version !== nextVersion ) break;
 
-        const isBump = await this.isCommitBump ( git, commit );
+        const isBump = await this.isCommitBump ( commit );
 
         if ( isBump ) break;
 
@@ -137,7 +178,7 @@ class Abstract {
 
   }
 
-  async updateVersion ( git, version ) {}
+  async updateVersion ( version ) {}
 
 }
 

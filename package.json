@@ -15,6 +15,33 @@
       "type": "object",
       "title": "Bump - Configuration",
       "properties": {
+        "bump.files": {
+          "type": "object",
+          "title": "A map of `relativeFilePath: [matchRegex, replacementText]`",
+          "default": {}
+        },
+        "bump.version.initial": {
+          "type": "string",
+          "title": "Initial version",
+          "default": "1.0.0"
+        },
+        "bump.version.increments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "List of available increments to pick from",
+          "default": [
+            "custom",
+            "major",
+            "minor",
+            "patch",
+            "premajor",
+            "preminor",
+            "prepatch",
+            "prerelease"
+          ]
+        },
         "bump.commit.enabled": {
           "type": "boolean",
           "description": "Commit the changes automatically",
@@ -107,7 +134,8 @@
     "mkdirp": "^0.5.1",
     "pify": "^3.0.0",
     "semver": "^5.4.1",
-    "simple-git": "^1.77.0"
+    "simple-git": "^1.77.0",
+    "touch": "^3.1.0"
   },
   "devDependencies": {
     "@types/node": "^6.0.40",

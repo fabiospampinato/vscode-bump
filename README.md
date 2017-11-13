@@ -12,7 +12,9 @@ This extension is here to save you time, this is what it can do for you:
 - It can automatically make a commit with the changes made.
 - How the changelog gets rendered and the commit message can be customized.
 
-It currently only works with Git projects having a `package.json` file at their root, basically JavaScript/TypeScript applications. Support for other kind of applications can be added given enough demand.
+It automatically detects NPM packages, and can be customized to bump the version in whatever file you need it to.
+
+It currently only works with Git projects.
 
 ## Install
 
@@ -27,13 +29,16 @@ ext install vscode-bump
 It adds 1 command to the command palette:
 
 ```js
-Bump // Bump your project's version, you'll be asked to pick a value between "major", "minor", "patch" etc.
+Bump // Bump your project's version, you'll be asked to pick an increment between "major", "minor", "patch" etc.
 ```
 
 ## Settings
 
 ```js
 {
+  "bump.files": {}, // A map of `relativeFilePath: [matchRegex, replacementText]`
+  "bump.version.initial": "1.0.0", // Initial version
+  "bump.version.increments": ["custom", "major", "minor", "patch", "premajor", "preminor", "prepatch", "prerelease"], // List of available increments to pick from
   "bump.commit.enabled": true, // Commit the changes automatically
   "bump.commit.message": "Bumped version to [version]", // Commit message
   "bump.changelog.enabled": true, // Enable changelog auto-updates
@@ -46,7 +51,19 @@ Bump // Bump your project's version, you'll be asked to pick a value between "ma
 }
 ```
 
-## Templates & Tokens
+You can bump the version in any file you like by populating the `bump.files` setting, for instance this is what it may look like if you want to bump the `VERSION` key inside the file `custom/file.js`:
+
+```js
+{
+  "bump.files": {
+    "custom/file.js": ["'VERSION':\\s*'([^']*)'", "'VERSION': '[version]'"]
+  }
+}
+```
+
+Basically each key is a path relative to the root of your project, the first item in the array is what will become a regex that will match the string to replace, and the second item in the array is the string that will replace the matched one, notice that the `[version]` token will be substituted with the actual version.
+
+## Changelog: Templates & Tokens
 
 How things get written in the changelog can be customized via templates, which are plain strings where tokens in the form of `[token]` will be replaced with some values.
 

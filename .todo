@@ -1,10 +1,8 @@
 
 Now:
   ☐ Add support for running some command before committing (like compiling for instance)
-  ☐ Add a `Bump: Init changelog` command
+  ☐ Add a `Bump: Init Changelog` command
 
 Maybe:
-  ☐ Add support for other kind of projects (non-NPM)
-    ☐ Like what?
   ☐ Use some heuristics to filter out some commits
     ☐ If there are too many commits maybe keep only those with the highest amount of changes
