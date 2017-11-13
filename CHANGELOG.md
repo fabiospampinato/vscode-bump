@@ -1,3 +1,8 @@
+### Version 1.1.0
+- Added support for bumping custom files
+- Autoselecting the `increment` type if there’s only one
+- Added support for setting a `custom` version
+
 ### Version 1.0.3
 - Properly getting the path of the currently active document
 
