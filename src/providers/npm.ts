@@ -12,7 +12,7 @@ class NPM extends Abstract {
 
   /* STATIC */
 
-  static increments = ['major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'];
+  static increments = ['custom', 'major', 'minor', 'patch', 'premajor', 'preminor', 'prepatch', 'prerelease'];
 
   static async isSupported ( repo ) {
 

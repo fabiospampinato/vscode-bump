@@ -41,16 +41,29 @@ class Abstract {
 
     /* VERSION */
 
-    const previousVersion = await this.getPreviousVersion ( git ),
-          nextVersion = await this.getNextVersion ( previousVersion, increment );
+    let version;
 
-    await this.updateVersion ( git, nextVersion );
+    if ( increment === 'custom' ) {
+
+      version = await vscode.window.showInputBox ({ placeHolder: 'Enter a version...' });
+
+    } else {
+
+      const previousVersion = await this.getPreviousVersion ( git );
+
+      version = await this.getNextVersion ( previousVersion, increment );
+
+    }
+
+    if ( !version ) return;
+
+    await this.updateVersion ( git, version );
 
     /* CHANGELOG */
 
     if ( config.changelog.enabled ) {
 
-      await Changelog.update ( git, nextVersion, currentCommits );
+      await Changelog.update ( git, version, currentCommits );
 
     }
 
@@ -58,7 +71,7 @@ class Abstract {
 
     if ( config.commit.enabled ) {
 
-      await Commit.do ( git, nextVersion );
+      await Commit.do ( git, version );
 
     }
 
