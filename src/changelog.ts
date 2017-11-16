@@ -31,7 +31,7 @@ const Changelog = {
 
     if ( config.templates.commit ) {
 
-      commits.forEach ( ( commit, index ) => {
+      commits.reverse ().forEach ( ( commit, index ) => {
 
         const {hash, date, message, author_name, author_email} = commit,
               messageCleaned = message.replace ( / \(HEAD\)$/i, '' ).replace ( / \(HEAD -> [^)]+\)$/i, '' ); //FIXME: Ugly, there should be a better way of doing it
