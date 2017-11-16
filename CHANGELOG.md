@@ -1,3 +1,7 @@
+### Version 1.1.1
+- Changelog: cleaning the commit message more reliably
+- Changelog: ensuring commits are in the proper order
+
 ### Version 1.1.0
 - Added support for bumping custom files
 - Autoselecting the `increment` type if there’s only one
