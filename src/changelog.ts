@@ -33,14 +33,15 @@ const Changelog = {
 
       commits.forEach ( ( commit, index ) => {
 
-        const {hash, date, message, author_name, author_email} = commit;
+        const {hash, date, message, author_name, author_email} = commit,
+              messageCleaned = message.replace ( / \(HEAD\)$/i, '' ).replace ( / \(HEAD -> [^)]+\)$/i, '' ); //FIXME: Ugly, there should be a better way of doing it
 
         const tokens = {
           hash: hash,
           hash4: hash.slice ( 0, 4 ),
           hash7: hash.slice ( 0, 7 ),
           hash8: hash.slice ( 0, 8 ),
-          message: index ? message : message.replace ( / \(HEAD\)/i, '' ).replace ( / \(HEAD -> \S+\)/i, '' ), //FIXME: Ugly, there should be a better way of doing it
+          message: messageCleaned,
           author_name,
           author_email
         };
