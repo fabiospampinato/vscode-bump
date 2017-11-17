@@ -1,3 +1,6 @@
+### Version 1.2.0
+- Added support for bumping multiple parts of a single file
+
 ### Version 1.1.1
 - Changelog: cleaning the commit message more reliably
 - Changelog: ensuring commits are in the proper order
