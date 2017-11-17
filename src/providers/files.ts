@@ -17,8 +17,20 @@ class Files extends Abstract {
 
     this.files = this.files || this.config.files;
     this.basePaths = Object.keys ( this.files );
-    this.regexes = this.basePaths.map ( basePath => new RegExp ( this.files[basePath][0], 'm' ) );
-    this.replacements = this.basePaths.map ( basePath => this.files[basePath][1] );
+    this.regexes = {};
+    this.replacements = {};
+
+    /* POPULATING REGEXES / REPLACEMENTS */
+
+    _.forOwn ( this.files, ( data, basePath ) => {
+
+      const datas = _.isArray ( data[0] ) ? data : [data],
+            [regexes, replacements] = _.zip ( ...datas );
+
+      this.regexes[basePath] = regexes.map ( regex => new RegExp ( regex, 'm' ) );
+      this.replacements[basePath] = replacements;
+
+    });
 
   }
 
@@ -38,13 +50,18 @@ class Files extends Abstract {
 
     for ( let i = 0, l = this.basePaths.length; i < l; i++ ) {
 
-      const content = await this.getContentByCommit ( commit, this.basePaths[i] );
+      const basePath = this.basePaths[i],
+            content = await this.getContentByCommit ( commit, basePath );
 
       if ( !content ) continue;
 
-      const match = content.match ( this.regexes[i] );
+      for ( let ri = 0, rl = this.regexes[basePath].length; ri < rl; ri++ ) {
 
-      if ( match ) return _.last ( match );
+        const match = content.match ( this.regexes[basePath][ri] );
+
+        if ( match ) return _.last ( match );
+
+      }
 
     }
 
@@ -56,14 +73,20 @@ class Files extends Abstract {
 
     for ( let i = 0, l = this.basePaths.length; i < l; i++ ) {
 
-      const diff = await this.getDiffByCommit ( commit, this.basePaths[i] );
+      const basePath = this.basePaths[i],
+            diff = await this.getDiffByCommit ( commit, basePath );
 
       if ( !diff ) continue;
 
-      const minusMatch = diff.match ( new RegExp ( `-.*${this.regexes[i].source}`, 'm' ) ),
-            plusMatch = diff.match ( new RegExp ( `\\+.*${this.regexes[i].source}`, 'm' ) );
+      for ( let ri = 0, rl = this.regexes[basePath].length; ri < rl; ri++ ) {
 
-      if ( minusMatch && plusMatch ) return true;
+        const regexSource = this.regexes[basePath][ri].source,
+              minusMatch = diff.match ( new RegExp ( `-.*${regexSource}`, 'm' ) ),
+              plusMatch = diff.match ( new RegExp ( `\\+.*${regexSource}`, 'm' ) );
+
+        if ( minusMatch && plusMatch ) return true;
+
+      }
 
     }
 
@@ -79,7 +102,15 @@ class Files extends Abstract {
 
       if ( !content ) return;
 
-      const newContent = content.replace ( this.regexes[i], this.replacements[i].replace ( '[version]', version ) );
+      let newContent = content;
+
+      this.regexes[basePath].forEach ( ( regex, ri ) => {
+
+        const replacement = this.replacements[basePath][ri];
+
+        newContent = newContent.replace ( regex, replacement.replace ( '[version]', version ) );
+
+      });
 
       this.setContent ( basePath, newContent );
 
