@@ -88,7 +88,7 @@ Here's a list of all the available tokens (not all of them are available for eve
 
 ![Demo](resources/demo.gif)
 
-## Hits:
+## Hints:
 
 - **Commits messages**: Spend some extra seconds to write descriptive commits messages, with no extra effort you'll be improving your changelogs as well. If you're already doing this, just enjoy the extra free time!
 - **Review**: Setting `bump.commit.enabled = false` and `bump.changelog.open = true` allows you to review your changelog before committing it. Alternatively you can also auto-commit it, review it later, and in case amend the previous commit.
