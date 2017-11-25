@@ -1,3 +1,6 @@
+### Version 1.2.1
+- Fixed a typo
+
 ### Version 1.2.0
 - Added support for bumping multiple parts of a single file
 
