@@ -48,6 +48,8 @@ class Files extends Abstract {
 
   async getVersionByCommit ( commit ) {
 
+    if ( !commit ) return super.getVersionByCommit ();
+
     for ( let i = 0, l = this.basePaths.length; i < l; i++ ) {
 
       const basePath = this.basePaths[i],
@@ -65,7 +67,7 @@ class Files extends Abstract {
 
     }
 
-    return this.config.version.initial;
+    return super.getVersionByCommit ();
 
   }
 

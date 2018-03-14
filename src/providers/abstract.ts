@@ -136,11 +136,15 @@ class Abstract {
 
   }
 
-  async getVersionByCommit ( commit ) {}
+  async getVersionByCommit ( commit? ) {
+
+    return this.config.version.initial;
+
+  }
 
   async getPreviousVersion () {
 
-    const {all} = await this.git.log ();
+    const all = await this.getAllCommits ();
 
     return await this.getVersionByCommit ( all[0] );
 
@@ -152,9 +156,25 @@ class Abstract {
 
   }
 
+  async getAllCommits () {
+
+    try { // An error gets thrown if there are no commits
+
+      const log = await this.git.log ();
+
+      return log.all;
+
+    } catch ( e ) {
+
+      return [];
+
+    }
+
+  }
+
   async getCurrentCommits () {
 
-    const {all} = await this.git.log (),
+    const all = await this.getAllCommits (),
           allCommits = all.slice ( 0, -1 ), // Ignoring the first commit
           currentCommits = [];
 
