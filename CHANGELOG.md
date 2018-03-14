@@ -1,3 +1,7 @@
+### Version 1.4.0
+- Changed initial version to `0.0.0`
+- Added support for repos with no commits
+
 ### Version 1.3.0
 - Added support for bumping without changes
 
