@@ -37,7 +37,7 @@ Bump // Bump your project's version, you'll be asked to pick an increment betwee
 ```js
 {
   "bump.files": {}, // A map of `relativeFilePath: [matchRegex, replacementText]`
-  "bump.version.initial": "1.0.0", // Initial version
+  "bump.version.initial": "0.0.0", // Initial version
   "bump.version.increments": ["custom", "major", "minor", "patch", "premajor", "preminor", "prepatch", "prerelease"], // List of available increments to pick from
   "bump.commit.enabled": true, // Commit the changes automatically
   "bump.commit.message": "Bumped version to [version]", // Commit message

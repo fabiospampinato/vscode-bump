@@ -23,7 +23,7 @@
         "bump.version.initial": {
           "type": "string",
           "title": "Initial version",
-          "default": "1.0.0"
+          "default": "0.0.0"
         },
         "bump.version.increments": {
           "type": "array",
