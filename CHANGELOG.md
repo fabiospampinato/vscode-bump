@@ -1,3 +1,6 @@
+### Version 1.3.0
+- Added support for bumping without changes
+
 ### Version 1.2.1
 - Fixed a typo
 
