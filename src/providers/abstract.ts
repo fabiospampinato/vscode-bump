@@ -44,7 +44,13 @@ class Abstract {
 
     /* CHECKS */
 
-    if ( !currentCommits.length ) return vscode.window.showErrorMessage ( 'No changes detected, cannot bump' );
+    if ( !currentCommits.length ) { // No changes
+
+      const action = await vscode.window.showInformationMessage ( 'No changes detected, bump anyway?', { title: 'Cancel' }, { title: 'Bump' } );
+
+      if ( !action || action.title !== 'Bump' ) return;
+
+    }
 
     /* VERSION */
 
