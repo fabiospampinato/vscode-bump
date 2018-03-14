@@ -1,6 +1,5 @@
 
 Now:
-  ☐ If no changed detected, ask nicely if we really want to bump the version or not
   ☐ Add support for running some command before committing (like compiling for instance)
   ☐ Add a `Bump: Init Changelog` command
 
