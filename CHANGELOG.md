@@ -1,3 +1,6 @@
+### Version 1.4.1
+- Updated readme
+
 ### Version 1.4.0
 - Changed initial version to `0.0.0`
 - Added support for repos with no commits
