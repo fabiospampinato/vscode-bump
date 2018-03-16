@@ -1,4 +1,4 @@
-# VSC Bump
+# Bump
 
 <p align="center">
 	<img src="https://raw.githubusercontent.com/fabiospampinato/vscode-bump/master/resources/logo-128x128.png" alt="Logo">
@@ -18,10 +18,10 @@ It currently only works with Git projects.
 
 ## Install
 
-Run the following in the command palette:
+Follow the instructions in the [Marketplace](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-bump), or run the following in the command palette:
 
 ```shell
-ext install vscode-bump
+ext install fabiospampinato.vscode-bump
 ```
 
 ## Usage
