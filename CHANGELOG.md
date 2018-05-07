@@ -1,3 +1,6 @@
+### Version 1.5.0
+- Added support for pre/post bump/changelog/commit scripts
+
 ### Version 1.4.1
 - Updated readme
 
