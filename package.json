@@ -86,6 +86,36 @@
           "type": "string",
           "description": "Template for the separator between versions sections",
           "default": "\n"
+        },
+        "bump.scripts.prebump": {
+          "type": "string",
+          "description": "Script to execute before bumping the version",
+          "default": ""
+        },
+        "bump.scripts.postbump": {
+          "type": "string",
+          "description": "Script to execute after bumping the version",
+          "default": ""
+        },
+        "bump.scripts.prechangelog": {
+          "type": "string",
+          "description": "Script to execute before updating the changelog",
+          "default": ""
+        },
+        "bump.scripts.postchangelog": {
+          "type": "string",
+          "description": "Script to execute after updating the changelog",
+          "default": ""
+        },
+        "bump.scripts.precommit": {
+          "type": "string",
+          "description": "Script to execute before committing",
+          "default": ""
+        },
+        "bump.scripts.postcommit": {
+          "type": "string",
+          "description": "Script to execute after committing",
+          "default": ""
         }
       }
     },

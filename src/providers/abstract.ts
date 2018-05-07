@@ -10,6 +10,7 @@ import * as touch from 'touch';
 import * as vscode from 'vscode';
 import Changelog from '../changelog';
 import Commit from '../commit';
+import Script from '../script';
 import Utils from '../utils';
 
 /* ABSTRACT */
@@ -70,7 +71,11 @@ class Abstract {
 
     if ( !version ) return;
 
+    await Script.run ( 'prebump' );
+
     await this.updateVersion ( version );
+
+    await Script.run ( 'postbump' );
 
     /* COMMIT */
 
@@ -80,7 +85,11 @@ class Abstract {
 
       if ( this.config.changelog.enabled ) {
 
+        await Script.run ( 'prechangelog' );
+
         await Changelog.update ( this.git, version, currentCommits );
+
+        await Script.run ( 'postchangelog' );
 
       }
 
@@ -88,7 +97,11 @@ class Abstract {
 
       if ( this.config.commit.enabled ) {
 
+        await Script.run ( 'precommit' );
+
         await Commit.do ( this.git, version );
+
+        await Script.run ( 'postcommit' );
 
       }
 

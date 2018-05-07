@@ -1,6 +1,5 @@
 
 Now:
-  ☐ Add support for running some command before committing (like compiling for instance)
   ☐ Add a `Bump: Init Changelog` command
 
 Maybe:

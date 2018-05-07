@@ -40,6 +40,12 @@ const Utils = {
 
   },
 
+  delay ( ms ) {
+
+    return new Promise ( resolve => setTimeout ( resolve, ms ) );
+
+  },
+
   file: {
 
     open ( filepath, isTextDocument = true ) {

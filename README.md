@@ -10,6 +10,7 @@ This extension is here to save you time, this is what it can do for you:
 - It can bump your project's version.
 - It can detect which commits where made after the latest bump and update your changelog accordingly.
 - It can automatically make a commit with the changes made.
+- It can execute custom scripts before/after bumping/updating-the-changelog/committing.
 - How the changelog gets rendered and the commit message can be customized.
 
 It automatically detects NPM packages, and can be customized to bump the version in whatever file you need it to.
@@ -47,7 +48,13 @@ Bump // Bump your project's version, you'll be asked to pick an increment betwee
   "bump.changelog.file": "CHANGELOG.md", // Name of the changelog file
   "bump.templates.version": "### Version [version]", // Template for the version line
   "bump.templates.commit": "- [message]", // Template for the commit line
-  "bump.templates.separator": "\n" // Template for the separator between versions sections
+  "bump.templates.separator": "\n", // Template for the separator between versions sections
+  "bump.scripts.prebump": "", // Script to execute before bumping the version
+  "bump.scripts.postbump": "", // Script to execute after bumping the version
+  "bump.scripts.prechangelog": "", // Script to execute before updating the changelog
+  "bump.scripts.postchangelog": "", // Script to execute after updating the changelog
+  "bump.scripts.precommit": "", // Script to execute before committing
+  "bump.scripts.postcommit": "" // Script to execute after committing
 }
 ```
 
@@ -92,6 +99,7 @@ Here's a list of all the available tokens (not all of them are available for eve
 
 - **Commits messages**: Spend some extra seconds to write descriptive commits messages, with no extra effort you'll be improving your changelogs as well. If you're already doing this, just enjoy the extra free time!
 - **Review**: Setting `bump.commit.enabled = false` and `bump.changelog.open = true` allows you to review your changelog before committing it. Alternatively you can also auto-commit it, review it later, and in case amend the previous commit.
+- **Scripts**: They can be used for automating releases/deployments. A `postbump` script could be used for compiling your project for production, then a `postcommit` script could push the commit and close the terminal instance Bump creates for executing these scripts (by adding a `&& exit 0` at the end of the script).
 
 ## License
 
