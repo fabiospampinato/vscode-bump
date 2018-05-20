@@ -1,3 +1,6 @@
+### Version 1.5.1
+- Changelog: putting the tokens in a table
+
 ### Version 1.5.0
 - Added support for pre/post bump/changelog/commit scripts
 
