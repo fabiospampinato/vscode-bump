@@ -78,18 +78,16 @@ How things get written in the changelog can be customized via templates, which a
 
 Here's a list of all the available tokens (not all of them are available for every template):
 
-```js
-[
-  "version", // The new version
-  "hash", // A commit's hash
-  "hash4", // First 4 characters of a commit's hash
-  "hash7", // First 7 characters of a commit's hash
-  "hash8", // First 8 characters of a commit's hash
-  "message", // A commit's message
-  "author_name", // Name of the author of a commit
-  "author_email", // Email of the author of a commit
-]
-```
+| Token            | Value                                 |
+|------------------|---------------------------------------|
+| `[version]`      | The new version                       |
+| `[hash]`         | A commit's hash                       |
+| `[hash4]`        | First 4 characters of a commit's hash |
+| `[hash7]`        | First 7 characters of a commit's hash |
+| `[hash8]`        | First 8 characters of a commit's hash |
+| `[message]`      | A commit's message                    |
+| `[author_name]`  | Name of the author of a commit        |
+| `[author_email]` | Email of the author of a commit       |
 
 ## Demo
 
