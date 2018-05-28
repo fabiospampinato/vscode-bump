@@ -1,3 +1,6 @@
+### Version 1.5.2
+- Opening the changelog as a non-preview
+
 ### Version 1.5.1
 - Changelog: putting the tokens in a table
 
