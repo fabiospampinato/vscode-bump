@@ -1,3 +1,6 @@
+### Version 1.5.3
+- Ensuring all instances of each token get replaced
+
 ### Version 1.5.2
 - Opening the changelog as a non-preview
 
