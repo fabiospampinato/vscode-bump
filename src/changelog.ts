@@ -74,7 +74,9 @@ const Changelog = {
 
     _.forOwn ( tokens, ( value, token ) => {
 
-      template = template.replace ( `[${token}]`, value );
+      const re = new RegExp ( `\\[${_.escapeRegExp ( token )}\\]`, 'g' );
+
+      template = template.replace ( re, value );
 
     });
 

@@ -110,7 +110,7 @@ class Files extends Abstract {
 
         const replacement = this.replacements[basePath][ri];
 
-        newContent = newContent.replace ( regex, replacement.replace ( '[version]', version ) );
+        newContent = newContent.replace ( regex, replacement.replace ( /\[version\]/g, version ) );
 
       });
 
