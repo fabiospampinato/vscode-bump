@@ -1,3 +1,6 @@
+### Version 1.5.4
+- Improved support for CRLF
+
 ### Version 1.5.3
 - Ensuring all instances of each token get replaced
 
