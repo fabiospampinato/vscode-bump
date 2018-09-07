@@ -1,3 +1,6 @@
+### Version 1.6.0
+- Added support for tagging the bump commit
+
 ### Version 1.5.4
 - Improved support for CRLF
 
