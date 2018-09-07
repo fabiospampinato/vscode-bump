@@ -10,6 +10,7 @@ This extension is here to save you time, this is what it can do for you:
 - It can bump your project's version.
 - It can detect which commits where made after the latest bump and update your changelog accordingly.
 - It can automatically make a commit with the changes made.
+- It can automatically tag the bump commit.
 - It can execute custom scripts before/after bumping/updating-the-changelog/committing.
 - How the changelog gets rendered and the commit message can be customized.
 
@@ -46,6 +47,8 @@ Bump // Bump your project's version, you'll be asked to pick an increment betwee
   "bump.changelog.create": false, // Create the changelog file if it doesn't exist
   "bump.changelog.open": false, // Open the changelog file after bumping
   "bump.changelog.file": "CHANGELOG.md", // Name of the changelog file
+  "bump.tag.enabled": false, // Tag the bump commit
+  "bump.tag.name": "v[version]", // The name of the tag
   "bump.templates.version": "### Version [version]", // Template for the version line
   "bump.templates.commit": "- [message]", // Template for the commit line
   "bump.templates.separator": "\n", // Template for the separator between versions sections
@@ -54,7 +57,9 @@ Bump // Bump your project's version, you'll be asked to pick an increment betwee
   "bump.scripts.prechangelog": "", // Script to execute before updating the changelog
   "bump.scripts.postchangelog": "", // Script to execute after updating the changelog
   "bump.scripts.precommit": "", // Script to execute before committing
-  "bump.scripts.postcommit": "" // Script to execute after committing
+  "bump.scripts.postcommit": "", // Script to execute after committing
+  "bump.scripts.pretag": "", // Script to execute before tagging
+  "bump.scripts.posttag": "" // Script to execute after tagging
 }
 ```
 

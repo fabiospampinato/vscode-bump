@@ -11,6 +11,7 @@ import * as vscode from 'vscode';
 import Changelog from '../changelog';
 import Commit from '../commit';
 import Script from '../script';
+import Tag from '../tag';
 import Utils from '../utils';
 
 /* ABSTRACT */
@@ -102,6 +103,16 @@ class Abstract {
         await Commit.do ( this.git, version );
 
         await Script.run ( 'postcommit' );
+
+        if ( this.config.tag.enabled ) {
+
+          await Script.run ( 'pretag' );
+
+          await Tag.add ( this.git, version );
+
+          await Script.run ( 'posttag' );
+
+        }
 
       }
 

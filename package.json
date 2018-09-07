@@ -72,6 +72,16 @@
           "description": "Name of the changelog file",
           "default": "CHANGELOG.md"
         },
+        "bump.tag.enabled": {
+          "type": "boolean",
+          "description": "Tag the bump commit",
+          "default": false
+        },
+        "bump.tag.name": {
+          "type": "string",
+          "description": "The name of the tag",
+          "default": "v[version]"
+        },
         "bump.templates.version": {
           "type": "string",
           "description": "Template for the version line",
@@ -115,6 +125,16 @@
         "bump.scripts.postcommit": {
           "type": "string",
           "description": "Script to execute after committing",
+          "default": ""
+        },
+        "bump.scripts.pretag": {
+          "type": "string",
+          "description": "Script to execute before tagging",
+          "default": ""
+        },
+        "bump.scripts.posttag": {
+          "type": "string",
+          "description": "Script to execute after tagging",
           "default": ""
         }
       }
