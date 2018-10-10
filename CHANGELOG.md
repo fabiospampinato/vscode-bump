@@ -1,3 +1,6 @@
+### Version 1.6.1
+- Bundling with webpack
+
 ### Version 1.6.0
 - Added support for tagging the bump commit
 
