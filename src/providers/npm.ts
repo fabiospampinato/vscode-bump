@@ -10,8 +10,8 @@ class NPM extends Files {
   init () {
 
     this.files = {
-      'package.json': ['"version":\\s*"([^"]*)"', '"version": "[version]"'],
-      'package-lock.json': ['"version":\\s*"([^"]*)"', '"version": "[version]"']
+      'package.json': ['"version":\\s*"([^"]*)"', '"version": "[version]"', 'm'],
+      'package-lock.json': ['"version":\\s*"([^"]*)"', '"version": "[version]"', 'm']
     };
 
     super.init ();

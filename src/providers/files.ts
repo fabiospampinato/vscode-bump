@@ -25,9 +25,9 @@ class Files extends Abstract {
     _.forOwn ( this.files, ( data, basePath ) => {
 
       const datas = _.isArray ( data[0] ) ? data : [data],
-            [regexes, replacements] = _.zip ( ...datas );
+            [regexes, replacements, flags] = _.zip ( ...datas );
 
-      this.regexes[basePath] = regexes.map ( regex => new RegExp ( regex, 'gm' ) );
+      this.regexes[basePath] = regexes.map ( ( regex, i ) => new RegExp ( regex, _.get ( flags, i, 'gm' ) ) );
       this.replacements[basePath] = replacements;
 
     });

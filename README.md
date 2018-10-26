@@ -73,7 +73,7 @@ You can bump the version in any file you like by populating the `bump.files` set
 }
 ```
 
-Basically each key is a path relative to the root of your project, the first item in the array is what will become a regex that will match the string to replace (it's important to wrap the actual version in a capturing block), and the second item in the array is the string that will replace the matched one, notice that the `[version]` token will be substituted with the actual version.
+Basically each key is a path relative to the root of your project, the first item in the array is what will become a regex that will match the string to replace (it's important to wrap the actual version in a capturing block), the second item in the array is the string that will replace the matched one (notice that the `[version]` token will be substituted with the actual version) and the optional third item is the regex flags to use.
 
 If you need to bump more than one version in a single file, just provide an array of arrays.
 
