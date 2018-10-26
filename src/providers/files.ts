@@ -27,7 +27,7 @@ class Files extends Abstract {
       const datas = _.isArray ( data[0] ) ? data : [data],
             [regexes, replacements] = _.zip ( ...datas );
 
-      this.regexes[basePath] = regexes.map ( regex => new RegExp ( regex, 'm' ) );
+      this.regexes[basePath] = regexes.map ( regex => new RegExp ( regex, 'gm' ) );
       this.replacements[basePath] = replacements;
 
     });
