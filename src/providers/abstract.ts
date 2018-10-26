@@ -38,7 +38,7 @@ class Abstract {
 
   }
 
-  async bump ( increment, commit = false ) {
+  async bump ( increment, version: string | boolean = false, commit = false ) {
 
     /* VARIABLES */
 
@@ -56,13 +56,7 @@ class Abstract {
 
     /* VERSION */
 
-    let version;
-
-    if ( increment === 'custom' ) {
-
-      version = await vscode.window.showInputBox ({ placeHolder: 'Enter a version...' });
-
-    } else {
+    if ( !version ) {
 
       const previousVersion = await this.getPreviousVersion ();
 

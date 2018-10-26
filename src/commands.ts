@@ -27,11 +27,13 @@ async function bump () {
 
   if ( !increment ) return;
 
+  const version = increment === 'custom' && await vscode.window.showInputBox ({ placeHolder: 'Enter a version...' });
+
   for ( let i = 0, l = supportedProviders.length; i < l; i++ ) {
 
     const isLast = ( i === l - 1 );
 
-    await supportedProviders[i].bump ( increment, isLast );
+    await supportedProviders[i].bump ( increment, version, isLast );
 
   }
 
