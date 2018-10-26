@@ -1,3 +1,8 @@
+### Version 1.7.0
+- Regexes: added the `g` flag
+- Asking for a custom version only once
+- Added support for a third “regex flags” parameter
+
 ### Version 1.6.1
 - Bundling with webpack
 
