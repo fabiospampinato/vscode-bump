@@ -1,3 +1,7 @@
+### Version 1.7.1
+- Outputting modern code (es2017, faster)
+- Using "Debug Launcher" for debugging
+
 ### Version 1.7.0
 - Regexes: added the `g` flag
 - Asking for a custom version only once
