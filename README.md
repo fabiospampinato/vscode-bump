@@ -104,6 +104,12 @@ Here's a list of all the available tokens (not all of them are available for eve
 - **Review**: Setting `bump.commit.enabled = false` and `bump.changelog.open = true` allows you to review your changelog before committing it. Alternatively you can also auto-commit it, review it later, and in case amend the previous commit.
 - **Scripts**: They can be used for automating releases/deployments. A `postbump` script could be used for compiling your project for production, then a `postcommit` script could push the commit and close the terminal instance Bump creates for executing these scripts (by adding a `&& exit 0` at the end of the script).
 
+## Contributing
+
+If you found a problem, or have a feature request, please open an [issue](https://github.com/fabiospampinato/vscode-bump/issues) about it.
+
+If you want to make a pull request you can debug the extension using [Debug Launcher](https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-debug-launcher).
+
 ## License
 
 MIT © Fabio Spampinato
