@@ -2,6 +2,7 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import * as path from 'path';
 import Config from './config';
 import Utils from './utils';
@@ -17,11 +18,16 @@ const Changelog = {
     const config = Config.get (),
           lines = [];
 
+    /* TOKENS */
+
+    const tokens = {
+      version,
+      version_date: moment ().format ( config.tokens.version_date.format )
+    };
+
     /* VERSION */
 
     if ( config.templates.version ) {
-
-      const tokens = {version};
 
       lines.push ( Changelog.renderLine ( config.templates.version, tokens ) );
 
@@ -36,17 +42,18 @@ const Changelog = {
         const {hash, date, message, author_name, author_email} = commit,
               messageCleaned = message.replace ( / \(HEAD\)$/i, '' ).replace ( / \(HEAD -> [^)]+\)$/i, '' ); //FIXME: Ugly, there should be a better way of doing it
 
-        const tokens = {
-          hash: hash,
+        const commitTokens = _.extend ( {}, tokens, {
+          date: moment ( date ).format ( config.tokens.date.format ),
+          message: messageCleaned,
+          hash,
           hash4: hash.slice ( 0, 4 ),
           hash7: hash.slice ( 0, 7 ),
           hash8: hash.slice ( 0, 8 ),
-          message: messageCleaned,
           author_name,
           author_email
-        };
+        });
 
-        lines.push ( Changelog.renderLine ( config.templates.commit, tokens ) );
+        lines.push ( Changelog.renderLine ( config.templates.commit, commitTokens ) );
 
       });
 
@@ -60,7 +67,7 @@ const Changelog = {
 
     if ( config.templates.separator ) {
 
-      section += Changelog.renderLine ( config.templates.separator );
+      section += Changelog.renderLine ( config.templates.separator, tokens );
 
     }
 

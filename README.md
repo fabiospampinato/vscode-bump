@@ -52,6 +52,8 @@ Bump // Bump your project's version, you'll be asked to pick an increment betwee
   "bump.templates.version": "### Version [version]", // Template for the version line
   "bump.templates.commit": "- [message]", // Template for the commit line
   "bump.templates.separator": "\n", // Template for the separator between versions sections
+  "bump.tokens.date.format": "YYYY-MM-DD" // Moment.js format to use when generating the `[date]` token
+  "bump.tokens.version_date.format": "YYYY-MM-DD" // Moment.js format to use when generating the `[version_date]` token
   "bump.scripts.prebump": "", // Script to execute before bumping the version
   "bump.scripts.postbump": "", // Script to execute after bumping the version
   "bump.scripts.prechangelog": "", // Script to execute before updating the changelog
@@ -83,16 +85,18 @@ How things get written in the changelog can be customized via templates, which a
 
 Here's a list of all the available tokens (not all of them are available for every template):
 
-| Token            | Value                                 |
-|------------------|---------------------------------------|
-| `[version]`      | The new version                       |
-| `[hash]`         | A commit's hash                       |
-| `[hash4]`        | First 4 characters of a commit's hash |
-| `[hash7]`        | First 7 characters of a commit's hash |
-| `[hash8]`        | First 8 characters of a commit's hash |
-| `[message]`      | A commit's message                    |
-| `[author_name]`  | Name of the author of a commit        |
-| `[author_email]` | Email of the author of a commit       |
+| Token            | Value                                       |
+| ---------------- | ------------------------------------------- |
+| `[version]`      | Version's number                            |
+| `[version_date]` | Version's date                              |
+| `[message]`      | Commit's message                            |
+| `[date]`         | Commit's date                               |
+| `[hash]`         | Commit's hash                               |
+| `[hash4]`        | Commit's hash cropped to first 4 characters |
+| `[hash7]`        | Commit's hash cropped to first 7 characters |
+| `[hash8]`        | Commit's hash cropped to first 8 characters |
+| `[author_name]`  | Author's name                               |
+| `[author_email]` | Author's email                              |
 
 ## Demo
 

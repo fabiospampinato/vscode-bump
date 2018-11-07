@@ -97,6 +97,16 @@
           "description": "Template for the separator between versions sections",
           "default": "\n"
         },
+        "bump.tokens.date.format": {
+          "type": "string",
+          "description": "Moment.js format to use when generating the `[date]` token",
+          "default": "YYYY-MM-DD"
+        },
+        "bump.tokens.version_date.format": {
+          "type": "string",
+          "description": "Moment.js format to use when generating the `[version_date]` token",
+          "default": "YYYY-MM-DD"
+        },
         "bump.scripts.prebump": {
           "type": "string",
           "description": "Script to execute before bumping the version",
@@ -183,6 +193,7 @@
     "find-up": "^2.1.0",
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
+    "moment": "^2.22.2",
     "pify": "^3.0.0",
     "semver": "^5.4.1",
     "simple-git": "^1.77.0",
