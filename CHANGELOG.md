@@ -1,3 +1,6 @@
+### Version 1.8.0
+- Added `[date]` and `[version_date]` tokens
+
 ### Version 1.7.2
 - Readme: using hi-res logo
 
