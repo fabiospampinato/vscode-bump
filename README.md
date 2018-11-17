@@ -1,7 +1,7 @@
 # Bump
 
 <p align="center">
-	<img src="https://raw.githubusercontent.com/fabiospampinato/vscode-bump/master/resources/logo.png" width="128" alt="Logo">
+  <img src="https://raw.githubusercontent.com/fabiospampinato/vscode-bump/master/resources/logo.png" width="128" alt="Logo">
 </p>
 
 Bump your project's version and update the changelog. Opinionated but configurable.
