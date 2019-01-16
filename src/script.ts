@@ -2,35 +2,40 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
+import delay from 'delay';
+import * as execa from 'execa';
 import * as vscode from 'vscode';
-import Config from './config';
-import Utils from './utils';
 
 /* SCRIPT */
 
 const Script = {
 
-  async run ( name ) {
+  async execa ( cwd: string, bin: string, args: string[] = [] ) {
 
-    const config = Config.get (),
-          script = _.get ( config, `scripts.${name}` );
+    try {
 
-    if ( !script ) return;
+      await execa ( bin, args, {cwd} );
 
-    const term = vscode.window.createTerminal ({ name: `Bump - ${name}`});
+      vscode.window.showInformationMessage ( '[bump] Done!' );
+
+    } catch ( e ) {
+
+      vscode.window.showErrorMessage ( `[bump] ${e}` );
+
+    }
+
+  },
+
+  async terminal ( cwd: string, bin: string, args: string[] = [] ) {
+
+    const term = vscode.window.createTerminal ({ cwd, name: 'Bump' });
 
     await term.processId;
-    await Utils.delay ( 150 );
+    await delay ( 200 );
 
-    return new Promise ( async resolve => {
+    term.show ( true );
 
-      vscode.window.onDidCloseTerminal ( t => t === term && resolve () );
-
-      term.show ( true );
-
-      term.sendText ( `${script} && exit 0` ); //TODO: Does closing a terminal like this always work? Maybe the script exits early or something
-
-    });
+    term.sendText ( `${bin} ${args.join ( ' ' )}` );
 
   }
 

@@ -18,6 +18,9 @@ const config = {
   externals: {
     vscode: 'commonjs vscode'
   },
+  node: {
+    __dirname: false
+  },
   resolve: {
     extensions: ['tsx', '.ts', '.jsx', '.js']
   },

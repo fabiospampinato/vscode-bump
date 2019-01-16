@@ -2,15 +2,12 @@
 /* IMPORT */
 
 import * as _ from 'lodash';
-import * as absolute from 'absolute';
-import {exec} from 'child_process';
-import * as findUp from 'find-up';
-import * as fs from 'fs';
-import * as mkdirp from 'mkdirp';
+import * as execa from 'execa';
+import * as opn from 'opn';
 import * as path from 'path';
-import * as pify from 'pify';
 import * as vscode from 'vscode';
 import * as Commands from './commands';
+import Config from './config';
 
 /* UTILS */
 
@@ -20,7 +17,7 @@ const Utils = {
 
     const {commands} = vscode.extensions.getExtension ( 'fabiospampinato.vscode-bump' ).packageJSON.contributes;
 
-    commands.forEach ( ({ command, title }) => {
+    commands.forEach ( ({ command }) => {
 
       const commandName = _.last ( command.split ( '.' ) ) as string,
             handler = Commands[commandName],
@@ -34,157 +31,82 @@ const Utils = {
 
   },
 
-  async exec ( command, options = {} ) {
+  bump: {
 
-    return pify ( exec )( command, options );
+    async getCwd () {
 
-  },
+      const textEditor = vscode.window.activeTextEditor;
 
-  delay ( ms ) {
+      if ( textEditor && path.isAbsolute ( textEditor.document.uri.fsPath ) ) {
 
-    return new Promise ( resolve => setTimeout ( resolve, ms ) );
+        return path.dirname ( textEditor.document.uri.fsPath );
 
-  },
+      } else if ( vscode.workspace.workspaceFolders ) {
 
-  file: {
-
-    open ( filepath, isTextDocument = true ) {
-
-      filepath = path.normalize ( filepath );
-
-      const fileuri = vscode.Uri.file ( filepath );
-
-      if ( isTextDocument ) {
-
-        return vscode.workspace.openTextDocument ( fileuri )
-                               .then ( doc => vscode.window.showTextDocument ( doc, { preview: false } ) );
+        return vscode.workspace.workspaceFolders[0].uri.fsPath;
 
       } else {
 
-        return vscode.commands.executeCommand ( 'vscode.open', fileuri );
+        vscode.window.showErrorMessage ( 'You have to execute the command in a supported directory' );
 
       }
 
     },
 
-    async make ( filepath, content ) {
-
-      await pify ( mkdirp )( path.dirname ( filepath ) );
-
-      return Utils.file.write ( filepath, content );
-
-    },
-
-    async read ( filepath ) {
+    getBinPath: _.memoize ( async () => {
 
       try {
-        return ( await pify ( fs.readFile )( filepath, { encoding: 'utf8' } ) ).toString ();
+
+        await execa ( 'bump', ['--version'] );
+
+        return 'bump';
+
       } catch ( e ) {
-        return;
+
+        const option = await vscode.window.showErrorMessage ( 'Couldn\'t find bump on your system, you need to install it', { title: 'Install' } );
+
+        if ( !option || option.title !== 'Install' ) return;
+
+        opn ( 'https://github.com/fabiospampinato/bump', { wait: false } );
+
       }
 
-    },
+    }),
 
-    readSync ( filepath ) {
+    async getArguments ( command?: string ) {
 
-      try {
-        return ( fs.readFileSync ( filepath, { encoding: 'utf8' } ) ).toString ();
-      } catch ( e ) {
-        return;
-      }
+      const args: string[] = [];
 
-    },
+      if ( command ) args.push ( command );
 
-    async write ( filepath, content ) {
+      if ( !command || command === 'version' ) {
 
-      return pify ( fs.writeFile )( filepath, content, {} );
+        const increments = ['major', 'minor', 'patch', 'custom'],
+              increment = await vscode.window.showQuickPick ( increments, { placeHolder: 'Select an increment...'} );
 
-    }
+        if ( !increment ) return;
 
-  },
+        if ( increment === 'custom' ) {
 
-  folder: {
+          const version = await vscode.window.showInputBox ({ placeHolder: 'Enter a version...' });
 
-    open ( folderpath, inNewWindow? ) {
+          if ( !version ) return;
 
-      vscode.commands.executeCommand ( 'vscode.openFolder', vscode.Uri.parse ( `file://${folderpath}` ), inNewWindow );
+          args.push ( version );
 
-    },
+        } else {
 
-    exists ( folderpath ) {
-
-      try {
-        fs.accessSync ( folderpath );
-        return true;
-      } catch ( e ) {
-        return false;
-      }
-
-    },
-
-    getParentPath ( basePath? ) {
-
-      return basePath && absolute ( basePath ) && path.dirname ( basePath );
-
-    },
-
-    getRootPath ( basePath? ) {
-
-      const {workspaceFolders} = vscode.workspace;
-
-      if ( !workspaceFolders ) return;
-
-      const firstRootPath = workspaceFolders[0].uri.fsPath;
-
-      if ( !basePath || !absolute ( basePath ) ) return firstRootPath;
-
-      const rootPaths = workspaceFolders.map ( folder => folder.uri.fsPath ),
-            sortedRootPaths = _.sortBy ( rootPaths, [path => path.length] ).reverse (); // In order to get the closest root
-
-      return sortedRootPaths.find ( rootPath => basePath.startsWith ( rootPath ) );
-
-    },
-
-    getWrapperPath ( basePath, root? ) {
-
-      const parentPath = () => Utils.folder.getParentPath ( basePath ),
-            rootPath = () => Utils.folder.getRootPath ( basePath );
-
-      return root ? rootPath () : parentPath () || rootPath ();
-
-    },
-
-    async getWrapperPathOf ( rootPath, cwdPath, findPath ) {
-
-      const foundPath = await findUp ( findPath, { cwd: cwdPath } );
-
-      if ( foundPath ) {
-
-        const wrapperPath = path.dirname ( foundPath );
-
-        if ( wrapperPath.startsWith ( rootPath ) ) {
-
-          return wrapperPath;
+          args.push ( increment );
 
         }
 
       }
 
-    }
+      const config = Config.get ();
 
-  },
+      if ( !config.terminal ) args.push ( '--force', '--silent' );
 
-  git: {
-
-    async getRepository () {
-
-      const {activeTextEditor} = vscode.window,
-            editorPath = activeTextEditor && activeTextEditor.document.uri.fsPath,
-            rootPath = Utils.folder.getRootPath ( editorPath );
-
-      if ( !rootPath ) return;
-
-      return await Utils.folder.getWrapperPathOf ( rootPath, editorPath || rootPath, '.git' );
+      return args;
 
     }
 

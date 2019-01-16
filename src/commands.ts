@@ -1,44 +1,70 @@
 
 /* IMPORT */
 
-import * as vscode from 'vscode';
-import Files from './providers/files';
-import NPM from './providers/npm';
 import Config from './config';
+import Script from './script';
 import Utils from './utils';
 
 /* COMMANDS */
 
-async function bump () {
+async function bump ( command?: string ) {
 
-  const config = Config.get (),
-        repo = await Utils.git.getRepository ();
+  const cwd = await Utils.bump.getCwd ();
 
-  if ( !repo ) return vscode.window.showErrorMessage ( 'You have to open a Git repository before being able to bump its version' );
+  if ( !cwd ) return;
 
-  const providers = [Files, NPM].map ( provider => new provider ( config, repo ) ),
-        supported = await Promise.all ( providers.map ( provider => provider.isSupported () ) ),
-        supportedProviders = providers.filter ( ( p, index ) => supported[index] );
+  const bin = await Utils.bump.getBinPath ();
 
-  if ( !supportedProviders.length ) return vscode.window.showErrorMessage ( 'This repository is not supported, read Bump\'s readme to learn more about it' );
+  if ( !bin ) return;
 
-  const increments = config.version.increments,
-        increment = increments.length === 1 ? increments[0] : await vscode.window.showQuickPick ( increments, { placeHolder: 'Select an increment...'} );
+  const args = await Utils.bump.getArguments ( command );
 
-  if ( !increment ) return;
+  if ( !args ) return;
 
-  const version = increment === 'custom' && await vscode.window.showInputBox ({ placeHolder: 'Enter a version...' });
+  const config = Config.get ();
 
-  for ( let i = 0, l = supportedProviders.length; i < l; i++ ) {
+  if ( !config.terminal ) {
 
-    const isLast = ( i === l - 1 );
+    Script.execa ( cwd, bin, args );
 
-    await supportedProviders[i].bump ( increment, version, isLast );
+  } else {
+
+    Script.terminal ( cwd, bin, args );
 
   }
 
 }
 
+function version () {
+
+  return bump ( 'version' );
+
+}
+
+function changelog () {
+
+  return bump ( 'changelog' );
+
+}
+
+function commit () {
+
+  return bump ( 'commit' );
+
+}
+
+function tag () {
+
+  return bump ( 'tag' );
+
+}
+
+function release () {
+
+  return bump ( 'release' );
+
+}
+
 /* EXPORT */
 
-export {bump};
+export {bump, version, changelog, commit, tag, release};

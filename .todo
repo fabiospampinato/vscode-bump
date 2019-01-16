@@ -1,7 +1,0 @@
-
-Now:
-  ☐ Add a `Bump: Init Changelog` command
-
-Maybe:
-  ☐ Use some heuristics to filter out some commits
-    ☐ If there are too many commits maybe keep only those with the highest amount of changes

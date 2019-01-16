@@ -1,151 +1,29 @@
 {
   "name": "vscode-bump",
   "displayName": "Bump",
-  "description": "Bump your project's version and update the changelog. Opinionated but configurable.",
+  "description": "Bump updates the project's version, updates/creates the changelog, makes the bump commit, tags the bump commit and makes the release to GitHub. Opinionated but configurable.",
   "icon": "resources/logo-128x128.png",
   "version": "1.8.0",
   "license": "MIT",
   "main": "out/extension.js",
   "publisher": "fabiospampinato",
   "activationEvents": [
-    "onCommand:bump.bump"
+    "onCommand:bump.bump",
+    "onCommand:bump.version",
+    "onCommand:bump.changelog",
+    "onCommand:bump.commit",
+    "onCommand:bump.tag",
+    "onCommand:bump.release"
   ],
   "contributes": {
     "configuration": {
       "type": "object",
       "title": "Bump - Configuration",
       "properties": {
-        "bump.files": {
-          "type": "object",
-          "title": "A map of `relativeFilePath: [matchRegex, replacementText]`",
-          "default": {}
-        },
-        "bump.version.initial": {
-          "type": "string",
-          "title": "Initial version",
-          "default": "0.0.0"
-        },
-        "bump.version.increments": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "title": "List of available increments to pick from",
-          "default": [
-            "custom",
-            "major",
-            "minor",
-            "patch",
-            "premajor",
-            "preminor",
-            "prepatch",
-            "prerelease"
-          ]
-        },
-        "bump.commit.enabled": {
+        "bump.terminal": {
           "type": "boolean",
-          "description": "Commit the changes automatically",
-          "default": true
-        },
-        "bump.commit.message": {
-          "type": "string",
-          "description": "Commit message",
-          "default": "Bumped version to [version]"
-        },
-        "bump.changelog.enabled": {
-          "type": "boolean",
-          "description": "Enable changelog auto-updates",
-          "default": true
-        },
-        "bump.changelog.create": {
-          "type": "boolean",
-          "description": "Create the changelog file if it doesn't exist",
+          "title": "Execute the bump command in a new terminal",
           "default": false
-        },
-        "bump.changelog.open": {
-          "type": "boolean",
-          "description": "Open the changelog file after bumping",
-          "default": false
-        },
-        "bump.changelog.file": {
-          "type": "string",
-          "description": "Name of the changelog file",
-          "default": "CHANGELOG.md"
-        },
-        "bump.tag.enabled": {
-          "type": "boolean",
-          "description": "Tag the bump commit",
-          "default": false
-        },
-        "bump.tag.name": {
-          "type": "string",
-          "description": "The name of the tag",
-          "default": "v[version]"
-        },
-        "bump.templates.version": {
-          "type": "string",
-          "description": "Template for the version line",
-          "default": "### Version [version]"
-        },
-        "bump.templates.commit": {
-          "type": "string",
-          "description": "Template for the commit line",
-          "default": "- [message]"
-        },
-        "bump.templates.separator": {
-          "type": "string",
-          "description": "Template for the separator between versions sections",
-          "default": "\n"
-        },
-        "bump.tokens.date.format": {
-          "type": "string",
-          "description": "Moment.js format to use when generating the `[date]` token",
-          "default": "YYYY-MM-DD"
-        },
-        "bump.tokens.version_date.format": {
-          "type": "string",
-          "description": "Moment.js format to use when generating the `[version_date]` token",
-          "default": "YYYY-MM-DD"
-        },
-        "bump.scripts.prebump": {
-          "type": "string",
-          "description": "Script to execute before bumping the version",
-          "default": ""
-        },
-        "bump.scripts.postbump": {
-          "type": "string",
-          "description": "Script to execute after bumping the version",
-          "default": ""
-        },
-        "bump.scripts.prechangelog": {
-          "type": "string",
-          "description": "Script to execute before updating the changelog",
-          "default": ""
-        },
-        "bump.scripts.postchangelog": {
-          "type": "string",
-          "description": "Script to execute after updating the changelog",
-          "default": ""
-        },
-        "bump.scripts.precommit": {
-          "type": "string",
-          "description": "Script to execute before committing",
-          "default": ""
-        },
-        "bump.scripts.postcommit": {
-          "type": "string",
-          "description": "Script to execute after committing",
-          "default": ""
-        },
-        "bump.scripts.pretag": {
-          "type": "string",
-          "description": "Script to execute before tagging",
-          "default": ""
-        },
-        "bump.scripts.posttag": {
-          "type": "string",
-          "description": "Script to execute after tagging",
-          "default": ""
         }
       }
     },
@@ -153,6 +31,26 @@
       {
         "command": "bump.bump",
         "title": "Bump"
+      },
+      {
+        "command": "bump.version",
+        "title": "Bump: Version"
+      },
+      {
+        "command": "bump.changelog",
+        "title": "Bump: Changelog"
+      },
+      {
+        "command": "bump.commit",
+        "title": "Bump: Commit"
+      },
+      {
+        "command": "bump.tag",
+        "title": "Bump: Tag"
+      },
+      {
+        "command": "bump.release",
+        "title": "Bump: Release"
       }
     ]
   },
@@ -176,29 +74,28 @@
     "url": "https://github.com/fabiospampinato/vscode-bump.git"
   },
   "engines": {
-    "vscode": "^1.15.0"
+    "vscode": "^1.25.0"
   },
   "keywords": [
     "vscode",
     "extension",
-    "changelog",
     "bump",
-    "version"
+    "automation",
+    "version",
+    "changelog",
+    "commit",
+    "tag",
+    "release"
   ],
   "categories": [
     "Other"
   ],
   "dependencies": {
     "@types/node": "^10.12.8",
-    "absolute": "0.0.1",
-    "find-up": "^2.1.0",
+    "delay": "^4.1.0",
+    "execa": "^1.0.0",
     "lodash": "^4.17.4",
-    "mkdirp": "^0.5.1",
-    "moment": "^2.22.2",
-    "pify": "^3.0.0",
-    "semver": "^5.4.1",
-    "simple-git": "^1.77.0",
-    "touch": "^3.1.0"
+    "opn": "^5.4.0"
   },
   "devDependencies": {
     "ts-loader": "^5.2.1",
