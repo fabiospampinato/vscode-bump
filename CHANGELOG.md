@@ -1,3 +1,6 @@
+### Version 2.0.0
+- Switched to [bump](https://github.com/fabiospampinato/bump), which you must install on your system
+
 ### Version 1.8.0
 - Added `[date]` and `[version_date]` tokens
 
