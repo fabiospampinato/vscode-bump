@@ -1,3 +1,8 @@
+### Version 2.1.0
+- Checking if bump is installed only after executing the command
+- Focusing to the terminal when executing the command there
+- Using the root directory as the cwd for the process when possible
+
 ### Version 2.0.0
 - Switched to [bump](https://github.com/fabiospampinato/bump), which you must install on your system
 
