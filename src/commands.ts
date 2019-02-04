@@ -13,9 +13,7 @@ async function bump ( command?: string ) {
 
   if ( !cwd ) return;
 
-  const bin = await Utils.bump.getBinPath ();
-
-  if ( !bin ) return;
+  const bin = Utils.bump.getBinName ();
 
   const args = await Utils.bump.getArguments ( command );
 

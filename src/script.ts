@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import delay from 'delay';
 import * as execa from 'execa';
 import * as vscode from 'vscode';
+import Utils from './utils';
 
 /* SCRIPT */
 
@@ -22,6 +23,8 @@ const Script = {
 
       vscode.window.showErrorMessage ( `[bump] ${e}` );
 
+      Utils.bump.getBinPath ();
+
     }
 
   },
@@ -36,6 +39,8 @@ const Script = {
     term.show ( true );
 
     term.sendText ( `${bin} ${args.join ( ' ' )}` );
+
+    Utils.bump.getBinPath ();
 
   }
 

@@ -53,13 +53,17 @@ const Utils = {
 
     },
 
-    getBinPath: _.memoize ( async () => {
+    getBinName: () => 'bump',
+
+    getBinPath: async () => {
+
+      const bin = Utils.bump.getBinName ();
 
       try {
 
-        await execa ( 'bump', ['--version'] );
+        await execa ( bin, ['--version'] );
 
-        return 'bump';
+        return bin;
 
       } catch ( e ) {
 
@@ -71,7 +75,7 @@ const Utils = {
 
       }
 
-    }),
+    },
 
     async getArguments ( command?: string ) {
 
