@@ -39,7 +39,18 @@ const Utils = {
 
       if ( textEditor && path.isAbsolute ( textEditor.document.uri.fsPath ) ) {
 
-        return path.dirname ( textEditor.document.uri.fsPath );
+        if ( vscode.workspace.workspaceFolders ) {
+
+          const rootPaths = vscode.workspace.workspaceFolders.map ( folder => folder.uri.fsPath ),
+                sortedRootPaths = _.sortBy ( rootPaths, [path => path.length] ).reverse (); // In order to get the closest root
+
+          return sortedRootPaths.find ( rootPath => textEditor.document.uri.fsPath.startsWith ( rootPath ) );
+
+        } else {
+
+          return path.dirname ( textEditor.document.uri.fsPath );
+
+        }
 
       } else if ( vscode.workspace.workspaceFolders ) {
 
