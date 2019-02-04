@@ -36,7 +36,7 @@ const Script = {
     await term.processId;
     await delay ( 200 );
 
-    term.show ( true );
+    term.show ( false );
 
     term.sendText ( `${bin} ${args.join ( ' ' )}` );
 
